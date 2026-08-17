@@ -5,299 +5,756 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>给你的一封信💌</title>
     <style>
-        *{
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Microsoft Yahei",sans-serif;
+            font-family: "Microsoft Yahei", sans-serif;
         }
 
-        body{
-            background: linear-gradient(135deg,#ffd6e0,#ffecf0,#e8f4ff);
-            min-height:100vh;
-            overflow-x:hidden;
+        body {
+            background: linear-gradient(135deg, #ffd6e0, #ffecf0, #e8f4ff);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
         }
 
-        .page{
-            width:100%;
-            min-height:100vh;
-            display:flex;
-            flex-direction:column;
-            justify-content:flex-start;
-            align-items:center;
-            padding:20px;
-            display:none;
+        /* ===== Hello Kitty 背景装饰 ===== */
+        .kitty-bg {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.25;
+            font-size: 60px;
+            animation: floatKitty 8s ease-in-out infinite;
         }
 
-        .page.active{
-            display:flex;
+        .kitty-bg:nth-child(1) {
+            top: 5%;
+            left: 3%;
+            font-size: 70px;
+            animation-delay: 0s;
+            opacity: 0.2;
+        }
+        .kitty-bg:nth-child(2) {
+            top: 15%;
+            right: 5%;
+            font-size: 55px;
+            animation-delay: 1.5s;
+            opacity: 0.2;
+        }
+        .kitty-bg:nth-child(3) {
+            bottom: 20%;
+            left: 8%;
+            font-size: 65px;
+            animation-delay: 3s;
+            opacity: 0.2;
+        }
+        .kitty-bg:nth-child(4) {
+            bottom: 10%;
+            right: 3%;
+            font-size: 75px;
+            animation-delay: 0.8s;
+            opacity: 0.2;
+        }
+        .kitty-bg:nth-child(5) {
+            top: 45%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 90px;
+            animation-delay: 2s;
+            opacity: 0.12;
+        }
+        .kitty-bg:nth-child(6) {
+            top: 30%;
+            left: 20%;
+            font-size: 45px;
+            animation-delay: 4s;
+            opacity: 0.18;
+        }
+        .kitty-bg:nth-child(7) {
+            bottom: 35%;
+            right: 15%;
+            font-size: 50px;
+            animation-delay: 2.5s;
+            opacity: 0.18;
+        }
+        .kitty-bg:nth-child(8) {
+            top: 8%;
+            left: 45%;
+            font-size: 40px;
+            animation-delay: 3.5s;
+            opacity: 0.15;
+        }
+        .kitty-bg:nth-child(9) {
+            bottom: 5%;
+            left: 30%;
+            font-size: 55px;
+            animation-delay: 1.2s;
+            opacity: 0.2;
+        }
+        .kitty-bg:nth-child(10) {
+            top: 55%;
+            right: 8%;
+            font-size: 48px;
+            animation-delay: 4.5s;
+            opacity: 0.18;
         }
 
-        /* 第一页 接收拒绝互动页 */
-        #page1{
-            justify-content:center;
-            text-align:center;
+        @keyframes floatKitty {
+            0%,
+            100% {
+                transform: translateY(0px) rotate(-5deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
         }
 
-        .heart{
-            font-size:80px;
-            animation: beat 1s infinite;
-            margin-bottom:30px;
+        .cute-decoration {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.15;
+            font-size: 35px;
+            animation: spinSlow 20s linear infinite;
         }
 
-        @keyframes beat{
-            0%,100%{transform: scale(1);}
-            50%{transform: scale(1.15);}
+        .cute-decoration:nth-child(11) {
+            top: 12%;
+            left: 15%;
+            animation-delay: 0s;
+        }
+        .cute-decoration:nth-child(12) {
+            bottom: 15%;
+            right: 12%;
+            animation-delay: 5s;
+            font-size: 30px;
+        }
+        .cute-decoration:nth-child(13) {
+            top: 50%;
+            left: 5%;
+            animation-delay: 10s;
+            font-size: 28px;
+        }
+        .cute-decoration:nth-child(14) {
+            top: 30%;
+            right: 3%;
+            animation-delay: 3s;
+            font-size: 32px;
+        }
+        .cute-decoration:nth-child(15) {
+            bottom: 40%;
+            left: 25%;
+            animation-delay: 7s;
+            font-size: 25px;
         }
 
-        .tip-text{
-            font-size:20px;
-            color:#c84c70;
-            margin-bottom:40px;
+        @keyframes spinSlow {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
-        .btn-group{
-            display:flex;
-            gap: 30px;
-            align-items:center;
-            position:relative;
-        }
-
-        .accept-btn{
-            padding:14px 36px;
-            font-size:18px;
-            border:none;
-            border-radius:50px;
-            background:#e65c85;
-            color:white;
-            cursor:pointer;
-            transition: transform 0.4s ease;
-            box-shadow: 0 4px 12px #ffb4c8;
-            z-index: 2;
-        }
-
-        .refuse-btn{
-            padding:14px 36px;
-            font-size:18px;
-            border:none;
-            border-radius:50px;
-            background:#999999;
-            color:white;
-            cursor:pointer;
-            transition: transform 0.4s ease;
+        .page {
+            width: 100%;
+            min-height: 100vh;
+            display: none;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 20px;
+            position: relative;
             z-index: 1;
         }
 
-        /*第二页布局*/
-        #page2{
-            position: relative;
-            padding-top:30px;
-            padding-bottom:80px;
+        .page.active {
+            display: flex;
         }
 
-        /* 左右照片固定不动 fixed */
-        .photo-column{
-            width:230px;
-            position:fixed;
-            top:60px;
+        /* ===== 第1页 ===== */
+        #page1 {
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .heart {
+            font-size: 80px;
+            animation: beat 1s infinite;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes beat {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.15);
+            }
+        }
+
+        .tip-text {
+            font-size: 20px;
+            color: #c84c70;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ===== 温馨小提示 ===== */
+        .gentle-tip {
+            font-size: 17px;
+            color: #d47a9a;
+            background: rgba(255, 255, 255, 0.55);
+            padding: 14px 28px;
+            border-radius: 50px;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 2px 12px rgba(200, 80, 120, 0.12);
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+            line-height: 1.8;
+            max-width: 480px;
+            border: 1px solid rgba(255, 182, 200, 0.3);
+        }
+
+        .gentle-tip .heart-icon {
+            color: #e65c85;
+            display: inline-block;
+            animation: beat 1.5s infinite;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            position: relative;
+            justify-content: center;
+            min-height: 120px;
+            z-index: 2;
+        }
+
+        .accept-btn {
+            padding: 14px 36px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            background: #e65c85;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 12px #ffb4c8;
+            z-index: 2;
+            position: relative;
+            transform-origin: center center;
+        }
+
+        .refuse-btn {
+            padding: 14px 36px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            background: #999999;
+            color: white;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 1;
+            position: relative;
+        }
+
+        /* ===== 自定义弹窗 ===== */
+        .custom-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .custom-modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-box {
+            background: linear-gradient(145deg, #fff5f7, #ffffff);
+            border-radius: 30px;
+            padding: 50px 45px 40px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(200, 80, 120, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-box::before {
+            content: "💗";
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 120px;
+            opacity: 0.08;
+            transform: rotate(15deg);
+        }
+
+        .modal-box::after {
+            content: "🌸";
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            font-size: 100px;
+            opacity: 0.08;
+            transform: rotate(-10deg);
+        }
+
+        .modal-heart {
+            font-size: 60px;
+            animation: beat 1.2s infinite;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .modal-title {
+            font-size: 26px;
+            color: #c84c70;
+            font-weight: bold;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-desc {
+            font-size: 17px;
+            color: #555;
+            line-height: 2;
+            margin-bottom: 28px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-desc .highlight {
+            color: #e65c85;
+            font-weight: bold;
+        }
+
+        .modal-btn {
+            padding: 14px 50px;
+            font-size: 19px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #e65c85, #d44a72);
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 6px 20px #ffb4c8;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px #ff8aaa;
+        }
+
+        /* ===== 第2页 ===== */
+        #page2 {
+            position: relative;
+            padding-top: 30px;
+            padding-bottom: 80px;
+        }
+
+        .photo-column {
+            width: 230px;
+            position: fixed;
+            top: 60px;
             height: 85vh;
         }
-        .left-column{
+        .left-column {
             left: 30px;
         }
-        .right-column{
+        .right-column {
             right: 30px;
         }
 
-        /*情书盒子：缩小宽度 + 独立滚动条 */
-        .letter-wrap{
+        .letter-wrap {
             max-width: 580px;
             height: 88vh;
             overflow-y: auto;
             margin: 0 auto;
             padding-right: 8px;
+            position: relative;
+            z-index: 2;
         }
 
-        /*美化滚动条*/
-        .letter-wrap::-webkit-scrollbar{
-            width:6px;
+        .letter-wrap::-webkit-scrollbar {
+            width: 6px;
         }
-        .letter-wrap::-webkit-scrollbar-thumb{
-            background:#f0b0c0;
-            border-radius:3px;
+        .letter-wrap::-webkit-scrollbar-thumb {
+            background: #f0b0c0;
+            border-radius: 3px;
         }
 
-        .letter-box{
-            background:rgba(255,255,255,0.85);
-            border-radius:20px;
-            padding:35px 28px;
+        .letter-box {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            padding: 35px 28px;
             box-shadow: 0 6px 25px #ffc8d8;
-            line-height:2.2;
-            font-size:17px;
-            color:#444;
-        }
-        .letter-title{
-            text-align:left;
-            font-size:22px;
-            color:#c84c70;
-            margin-bottom:20px;
-            font-weight:bold;
+            line-height: 2.2;
+            font-size: 17px;
+            color: #444;
         }
 
-        .paragraph{
+        .letter-title {
+            text-align: left;
+            font-size: 22px;
+            color: #c84c70;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .paragraph {
             text-indent: 2em;
-            margin-bottom:16px;
+            margin-bottom: 16px;
         }
 
-        .signature{
-            text-align:right;
-            margin-top:40px;
+        .signature {
+            text-align: right;
+            margin-top: 40px;
         }
 
-        /*拍立得样式*/
-        .polaroid{
-            width:170px;
-            background:#ffffff;
-            padding:12px 12px 18px 12px;
-            border-radius:6px;
-            box-shadow:
-                0 12px 28px rgba(180, 120, 140, 0.22),
-                0 0 0 1px rgba(255,255,255,0.8);
-            position:absolute;
+        /* ===== 拍立得照片 ===== */
+        .polaroid {
+            width: 170px;
+            background: #ffffff;
+            padding: 10px 10px 16px 10px;
+            border-radius: 6px;
+            box-shadow: 0 12px 28px rgba(180, 120, 140, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.8);
+            position: absolute;
             cursor: pointer;
             animation: polaroidBreath 3.2s ease-in-out infinite;
             transition: transform 0.25s ease;
         }
 
-        .polaroid:hover{
+        .polaroid:hover {
             z-index: 10;
             transform: scale(1.08) !important;
         }
 
-        .polaroid img{
-            width:100%;
-            height:130px;
-            object-fit:cover;
-            border-radius:4px;
-            display:block;
-            filter: brightness(1.02) saturate(1.05);
-            pointer-events:none;
+        .polaroid img {
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+            border-radius: 4px;
+            display: block;
+            background: #faf0f0;
+            pointer-events: none;
         }
 
-        .polaroid::after{
-            content:"";
-            display:block;
-            height:18px;
-            background:#fffaf2;
-            margin-top:8px;
-            border-radius:0 0 4px 4px;
+        .polaroid::after {
+            content: "";
+            display: block;
+            height: 16px;
+            background: #fffaf2;
+            margin-top: 6px;
+            border-radius: 0 0 4px 4px;
         }
 
-        .polaroid::before{
-            content:"";
-            position:absolute;
-            inset:0;
-            border-radius:6px;
-            background-image:url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
-            pointer-events:none;
-            opacity:0.35;
+        .polaroid::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 6px;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+            pointer-events: none;
+            opacity: 0.35;
         }
 
-        @keyframes polaroidBreath{
-            0%,100%{
-                opacity:1;
+        @keyframes polaroidBreath {
+            0%,
+            100% {
+                opacity: 1;
             }
-            50%{
+            50% {
                 transform: translateY(-8px) scale(1.04);
-                opacity:0.93;
+                opacity: 0.93;
             }
         }
 
-        /*左侧照片位置*/
-        .p1{top:20px;   left:10px;    transform:rotate(-3deg); animation-delay:0.0s;}
-        .p2{top:130px;  left:35px;    transform:rotate(2deg);  animation-delay:0.2s;}
-        .p3{top:250px;  left:0px;     transform:rotate(-4deg); animation-delay:0.4s;}
-        .p4{top:370px;  left:40px;    transform:rotate(3deg);  animation-delay:0.6s;}
-        .p5{top:480px;  left:5px;     transform:rotate(-2deg); animation-delay:0.8s;}
-        .p6{top:590px;  left:30px;    transform:rotate(4deg);  animation-delay:1.0s;}
-        .p7{top:710px;  left:12px;    transform:rotate(-3deg); animation-delay:1.2s;}
+        /* 左侧照片位置 */
+        .p1 {
+            top: 20px;
+            left: 10px;
+            transform: rotate(-3deg);
+            animation-delay: 0.0s;
+        }
+        .p2 {
+            top: 135px;
+            left: 35px;
+            transform: rotate(2deg);
+            animation-delay: 0.2s;
+        }
+        .p3 {
+            top: 260px;
+            left: 0px;
+            transform: rotate(-4deg);
+            animation-delay: 0.4s;
+        }
+        .p4 {
+            top: 385px;
+            left: 40px;
+            transform: rotate(3deg);
+            animation-delay: 0.6s;
+        }
+        .p5 {
+            top: 500px;
+            left: 5px;
+            transform: rotate(-2deg);
+            animation-delay: 0.8s;
+        }
+        .p6 {
+            top: 615px;
+            left: 30px;
+            transform: rotate(4deg);
+            animation-delay: 1.0s;
+        }
+        .p7 {
+            top: 735px;
+            left: 12px;
+            transform: rotate(-3deg);
+            animation-delay: 1.2s;
+        }
 
-        /*右侧照片位置*/
-        .p8{top:40px;   left:0px;     transform:rotate(3deg);  animation-delay:0.1s;}
-        .p9{top:150px;  left:32px;    transform:rotate(-2deg); animation-delay:0.3s;}
-        .p10{top:270px; left:8px;     transform:rotate(4deg);  animation-delay:0.5s;}
-        .p11{top:385px; left:38px;    transform:rotate(-3deg); animation-delay:0.7s;}
-        .p12{top:500px; left:2px;     transform:rotate(2deg);  animation-delay:0.9s;}
-        .p13{top:615px; left:33px;    transform:rotate(-4deg); animation-delay:1.1s;}
-        .p14{top:730px; left:6px;     transform:rotate(3deg);  animation-delay:1.3s;}
-        .p15{top:845px; left:35px;    transform:rotate(-2deg); animation-delay:1.5s;}
+        /* 右侧照片位置 */
+        .p8 {
+            top: 40px;
+            left: 0px;
+            transform: rotate(3deg);
+            animation-delay: 0.1s;
+        }
+        .p9 {
+            top: 155px;
+            left: 32px;
+            transform: rotate(-2deg);
+            animation-delay: 0.3s;
+        }
+        .p10 {
+            top: 280px;
+            left: 8px;
+            transform: rotate(4deg);
+            animation-delay: 0.5s;
+        }
+        .p11 {
+            top: 400px;
+            left: 38px;
+            transform: rotate(-3deg);
+            animation-delay: 0.7s;
+        }
+        .p12 {
+            top: 515px;
+            left: 2px;
+            transform: rotate(2deg);
+            animation-delay: 0.9s;
+        }
+        .p13 {
+            top: 630px;
+            left: 33px;
+            transform: rotate(-4deg);
+            animation-delay: 1.1s;
+        }
+        .p15 {
+            top: 745px;
+            left: 35px;
+            transform: rotate(-2deg);
+            animation-delay: 1.5s;
+        }
 
-        /*大图预览弹窗*/
-        .lightbox{
+        /* ===== 大图预览 ===== */
+        .lightbox {
             position: fixed;
             inset: 0;
-            background-color: rgba(0,0,0,0.85);
-            display:none;
-            justify-content:center;
-            align-items:center;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
             z-index: 9999;
             padding: 20px;
         }
-        .lightbox img{
+        .lightbox img {
             max-width: 90%;
             max-height: 90vh;
             border-radius: 6px;
+            object-fit: contain;
         }
 
-        /*手机适配：小屏幕隐藏左右照片*/
-        @media (max-width: 1200px){
-            .photo-column{
-                display:none;
+        /* ===== 响应式 ===== */
+        @media (max-width: 1200px) {
+            .photo-column {
+                display: none;
             }
-
-            .letter-wrap{
-                max-width:100%;
-                height:auto;
-                overflow-y:visible;
+            .letter-wrap {
+                max-width: 100%;
+                height: auto;
+                overflow-y: visible;
+            }
+            .kitty-bg,
+            .cute-decoration {
+                opacity: 0.12;
+                font-size: 40px !important;
             }
         }
 
-        /*飘落爱心*/
-        .fall-heart{
-            position:fixed;
-            top:-50px;
-            color:#ff6b8b;
-            font-size:24px;
-            pointer-events:none;
-            animation: fall 6s linear infinite;
-            z-index:-1;
+        @media (max-width: 768px) {
+            .kitty-bg,
+            .cute-decoration {
+                display: none;
+            }
+            .modal-box {
+                padding: 35px 25px 30px;
+            }
+            .modal-title {
+                font-size: 22px;
+            }
+            .modal-desc {
+                font-size: 15px;
+            }
+            .gentle-tip {
+                font-size: 15px;
+                padding: 12px 20px;
+                max-width: 95%;
+            }
         }
 
-        @keyframes fall{
-            0%{top:-50px;opacity:1;}
-            100%{top:100vh;opacity:0;}
+        /* ===== 飘落元素 - 多元素混合 ===== */
+        .fall-element {
+            position: fixed;
+            top: -60px;
+            pointer-events: none;
+            z-index: 0;
+            font-size: 28px;
+            animation: fallDown linear infinite;
+            user-select: none;
+        }
+
+        @keyframes fallDown {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(720deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* ===== 挤压动画 ===== */
+        @keyframes squeeze {
+            0% {
+                transform: scale(1) rotate(0deg);
+            }
+            20% {
+                transform: scale(0.7, 1.3) rotate(-8deg);
+            }
+            40% {
+                transform: scale(0.8, 1.2) rotate(5deg);
+            }
+            60% {
+                transform: scale(1.1, 0.9) rotate(-3deg);
+            }
+            80% {
+                transform: scale(0.95, 1.05) rotate(2deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .refuse-btn.squeeze {
+            animation: squeeze 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
     </style>
 </head>
 <body>
+
+    <!-- ===== Hello Kitty 背景装饰 ===== -->
+    <div class="kitty-bg">🎀</div>
+    <div class="kitty-bg">🌸</div>
+    <div class="kitty-bg">🎀</div>
+    <div class="kitty-bg">🌸</div>
+    <div class="kitty-bg">🐱</div>
+    <div class="kitty-bg">🎀</div>
+    <div class="kitty-bg">🌸</div>
+    <div class="kitty-bg">🎀</div>
+    <div class="kitty-bg">🌸</div>
+    <div class="kitty-bg">🐱</div>
+
+    <div class="cute-decoration">🎀</div>
+    <div class="cute-decoration">🌸</div>
+    <div class="cute-decoration">🎀</div>
+    <div class="cute-decoration">🌸</div>
+    <div class="cute-decoration">💮</div>
+
     <div class="lightbox" id="lightbox">
         <img id="light-img" src="" alt="大图预览">
     </div>
     <div id="fallContainer"></div>
 
-    <!--第一页互动-->
+    <!-- ===== 自定义弹窗 ===== -->
+    <div class="custom-modal" id="thankModal">
+        <div class="modal-box">
+            <span class="modal-heart">💖</span>
+            <div class="modal-title">宝宝酱我就知道你不忍心拒绝我！</div>
+            <div class="modal-desc">
+                被你选择是这个世界上最温柔的事<br>
+                我写的每一个字都藏着对你的喜欢 💕
+            </div>
+            <button class="modal-btn" id="continueBtn">📖 继续看信</button>
+        </div>
+    </div>
+
+    <!-- ========== 第1页 ========== -->
     <div class="page active" id="page1">
         <div class="heart">💗</div>
-        <p class="tip-text">有一封信，想送给最可爱的小乖乖<br>请选择是否接收这份心意</p>
+
+        <div class="gentle-tip">
+            <span class="heart-icon">💕</span>
+            宝宝酱，你可以拒绝我，也可以接收我<br>
+            但无论如何，我的心意都会在这里等你
+            <span class="heart-icon">💕</span>
+        </div>
+
+        <p class="tip-text">请选择是否接收这份心意</p>
         <div class="btn-group">
             <button class="accept-btn" id="acceptBtn">💌 接收</button>
             <button class="refuse-btn" id="refuseBtn">❌ 拒绝</button>
         </div>
     </div>
 
-    <!--第二页情书页面-->
+    <!-- ========== 第2页 ========== -->
     <div class="page" id="page2">
-        <!--左侧固定照片栏-->
+
         <div class="photo-column left-column">
             <div class="polaroid p1"><img src="pic1.jpg" alt="合照"></div>
             <div class="polaroid p2"><img src="pic2.jpg" alt="合照"></div>
@@ -308,10 +765,10 @@
             <div class="polaroid p7"><img src="pic7.jpg" alt="合照"></div>
         </div>
 
-        <!--情书滚动容器-->
         <div class="letter-wrap">
             <div class="letter-box">
-                <div class="letter-title">亲爱的娴小咪：</div>
+                <div class="letter-title">亲爱的小思娴：</div>
+
                 <p class="paragraph">见字如面，展信舒颜！</p>
                 <p class="paragraph">最喜欢给小宝宝写信诉说我对你的喜欢！每一次写信就如同再一次向你表白，每每在落笔的时候，你总是浮现在我的脑海中。</p>
                 <p class="paragraph">本来是想写一封从头到尾的情书，没想到这段时间总是在惹你生气，但是却也没有和你好好的道歉，然后七夕节我也没有为你准备什么礼物（有滴，一个小礼物，只不过他是预售，到现在都还没发货！我跟客服软磨硬泡，那个客服就像是个人机一样就只会说不好意思我们是预售，有货了就会按顺序发的……所以需要宝宝再等等啦！小宝宝可以稍微期待一下下，只有一下下，不过还是希望可以让宝宝喜欢它）ok我们话又说回来，所以我想说的是原本的情书我就把它改成道歉和情书，宝宝请笑纳。</p>
@@ -321,12 +778,13 @@
                 <p class="paragraph">之所以选择做成网页信件，也是因为微信长长的文字容易让人视觉疲惫，换一种方式送给你，希望你可以喜欢。</p>
                 <p class="paragraph">小思娴对不起，小狗不想再惹你伤心难过了，往后的日子愿你三餐温暖，夜夜安眠，平安喜乐，万事顺心，天天开开心心！</p>
                 <p class="paragraph">小思娴宝宝酱喜欢你呀，三百天快乐，七夕快乐！</p>
+                <p class="paragraph">一起迎接我们下一个三百天！</p>
                 <p class="paragraph">我爱你！</p>
+
                 <p class="signature">爱你的沥小汪</p>
             </div>
         </div>
 
-        <!--右侧固定照片栏-->
         <div class="photo-column right-column">
             <div class="polaroid p8"><img src="pic8.jpg" alt="合照"></div>
             <div class="polaroid p9"><img src="pic9.jpg" alt="合照"></div>
@@ -334,61 +792,231 @@
             <div class="polaroid p11"><img src="pic11.jpg" alt="合照"></div>
             <div class="polaroid p12"><img src="pic12.jpg" alt="合照"></div>
             <div class="polaroid p13"><img src="pic13.jpg" alt="合照"></div>
-            <div class="polaroid p14"><img src="pic14.jpg" alt="合照"></div>
             <div class="polaroid p15"><img src="pic15.jpg" alt="合照"></div>
         </div>
     </div>
 
     <script>
+        // ========== 拒绝按钮 - 随机移动 + 接收按钮无限变大 ==========
         const acceptBtn = document.getElementById("acceptBtn");
         const refuseBtn = document.getElementById("refuseBtn");
-        let scaleNum = 1;
-        let offsetX = 0;
-        const maxOffset = 550;
-        let stopGrow = false;
+        const page1 = document.getElementById("page1");
+        const thankModal = document.getElementById("thankModal");
+        const continueBtn = document.getElementById("continueBtn");
 
-        refuseBtn.onclick = function(){
-            if(stopGrow) return;
-            scaleNum += 0.22;
-            offsetX += 35;
-            acceptBtn.style.transform = `scale(${scaleNum})`;
-            refuseBtn.style.transform = `translateX(${offsetX}px)`;
+        const tipList = [
+            "真的要拒绝我吗？",
+            "接收好不好呀？",
+            "可爱的小宝宝酱请收下我的爱心~",
+            "不要丢下我好不好🥺",
+            "再拒绝我就要伤心落泪啦",
+            "乖乖收下这份心意好不好",
+            "我的小宝宝就忍心拒绝小狗吗",
+            "求求宝宝看一看这封信吧",
+            "别拒绝啦，里面全都是我对你的思念",
+            "心动一下嘛，就一点点就好",
+            "我的爱意已经奔向你啦，请不要推开它",
+            "思娴宝贝，就收下好不好",
+            "拒绝的话小狗会委屈一整天的",
+            "再考虑一小下下可以吗",
+            "这份情书只为你一人而写",
+            "不要狠心拒绝滚烫的爱意呀",
+            "快点击接收，来看看我想对你说的话",
+            "小宝宝心软一次好不好~",
+            "我已经鼓起很大勇气写下这封信啦",
+            "不要让我的期待落空好不好"
+        ];
 
-            if(offsetX >= maxOffset){
-                stopGrow = true;
-            }
+        function rectsOverlap(r1, r2) {
+            return !(r2.left > r1.right || r2.right < r1.left ||
+                r2.top > r1.bottom || r2.bottom < r1.top);
         }
 
-        acceptBtn.onclick = function(){
+        function getRandomPosition(acceptRect) {
+            const btnRect = refuseBtn.getBoundingClientRect();
+            const btnWidth = btnRect.width || 120;
+            const btnHeight = btnRect.height || 50;
+
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+
+            const padding = 20;
+            const minX = padding;
+            const maxX = viewportWidth - btnWidth - padding;
+            const minY = padding;
+            const maxY = viewportHeight - btnHeight - padding;
+
+            let randomX, randomY;
+            let attempts = 0;
+            const maxAttempts = 200;
+
+            do {
+                randomX = minX + Math.random() * (maxX - minX);
+                randomY = minY + Math.random() * (maxY - minY);
+                attempts++;
+
+                const r1 = {
+                    left: randomX - 20,
+                    right: randomX + btnWidth + 20,
+                    top: randomY - 20,
+                    bottom: randomY + btnHeight + 20
+                };
+
+                if (!rectsOverlap(r1, acceptRect)) {
+                    break;
+                }
+
+                if (attempts > maxAttempts) break;
+            } while (true);
+
+            return { x: randomX, y: randomY };
+        }
+
+        let acceptScale = 1;
+
+        function triggerSqueeze() {
+            refuseBtn.classList.remove('squeeze');
+            void refuseBtn.offsetWidth;
+            refuseBtn.classList.add('squeeze');
+        }
+
+        refuseBtn.onclick = function(e) {
+            const randomText = tipList[Math.floor(Math.random() * tipList.length)];
+            alert(randomText);
+
+            const acceptRect = acceptBtn.getBoundingClientRect();
+            const pos = getRandomPosition(acceptRect);
+
+            const refuseRect = {
+                left: pos.x,
+                right: pos.x + (refuseBtn.offsetWidth || 120),
+                top: pos.y,
+                bottom: pos.y + (refuseBtn.offsetHeight || 50)
+            };
+
+            const acceptRect2 = acceptBtn.getBoundingClientRect();
+
+            if (rectsOverlap(refuseRect, acceptRect2)) {
+                triggerSqueeze();
+            }
+
+            refuseBtn.style.position = 'fixed';
+            refuseBtn.style.left = pos.x + 'px';
+            refuseBtn.style.top = pos.y + 'px';
+            refuseBtn.style.transform = 'none';
+            refuseBtn.style.margin = '0';
+
+            acceptScale += 0.5;
+            acceptBtn.style.transform = `scale(${acceptScale})`;
+            acceptBtn.style.fontSize = `${18 * (1 + (acceptScale - 1) * 0.15)}px`;
+
+            setTimeout(() => {
+                const newAcceptRect = acceptBtn.getBoundingClientRect();
+                const newRefuseRect = refuseBtn.getBoundingClientRect();
+                if (rectsOverlap(newAcceptRect, newRefuseRect)) {
+                    triggerSqueeze();
+                }
+            }, 50);
+        };
+
+        window.addEventListener('resize', function() {
+            if (refuseBtn.style.position === 'fixed') {
+                const rect = refuseBtn.getBoundingClientRect();
+                const vw = window.innerWidth;
+                const vh = window.innerHeight;
+                const btnWidth = rect.width;
+                const btnHeight = rect.height;
+
+                let left = parseFloat(refuseBtn.style.left);
+                let top = parseFloat(refuseBtn.style.top);
+
+                if (left + btnWidth > vw - 10) left = vw - btnWidth - 10;
+                if (top + btnHeight > vh - 10) top = vh - btnHeight - 10;
+                if (left < 10) left = 10;
+                if (top < 10) top = 10;
+
+                refuseBtn.style.left = left + 'px';
+                refuseBtn.style.top = top + 'px';
+            }
+        });
+
+        // ========== 接收按钮 - 弹出感谢弹窗 ==========
+        acceptBtn.onclick = function() {
+            thankModal.classList.add('active');
+        };
+
+        // ========== 继续看信按钮 ==========
+        continueBtn.onclick = function() {
+            thankModal.classList.remove('active');
             document.getElementById("page1").classList.remove('active');
             document.getElementById("page2").classList.add('active');
-        }
+        };
 
-        //图片预览
+        // ========== 点击照片大图预览 ==========
         const lightbox = document.getElementById('lightbox');
         const lightImg = document.getElementById('light-img');
         const allPhotos = document.querySelectorAll('.polaroid img');
-        allPhotos.forEach(item=>{
-            item.parentElement.onclick = function(){
+
+        allPhotos.forEach(item => {
+            item.parentElement.onclick = function() {
                 lightImg.src = item.src;
                 lightbox.style.display = 'flex';
-            }
-        })
+            };
+        });
 
-        lightbox.onclick = function(){
+        lightbox.onclick = function() {
             lightbox.style.display = 'none';
+        };
+
+        // ========== 多元素飘落 ==========
+        const fallElements = ['❤️', '🎂', '🌸', '🌹', '🐕', '🐈'];
+
+        function createFallElement() {
+            const el = document.createElement('div');
+            el.classList.add('fall-element');
+
+            // 随机选择一个元素
+            const emoji = fallElements[Math.floor(Math.random() * fallElements.length)];
+            el.textContent = emoji;
+
+            // 随机大小
+            const size = 20 + Math.random() * 30;
+            el.style.fontSize = size + 'px';
+
+            // 随机水平位置
+            el.style.left = Math.random() * 100 + '%';
+
+            // 随机动画持续时间
+            const duration = 6 + Math.random() * 8;
+            el.style.animationDuration = duration + 's';
+
+            // 随机动画延迟
+            el.style.animationDelay = Math.random() * 2 + 's';
+
+            // 随机旋转起始角度
+            el.style.transform = `rotate(${Math.random() * 360}deg)`;
+
+            document.getElementById('fallContainer').appendChild(el);
+
+            // 动画结束后移除
+            setTimeout(() => {
+                el.remove();
+            }, (duration + 2) * 1000);
         }
 
-        //爱心飘落
-        function createHeart(){
-            const heart = document.createElement('div');
-            heart.classList.add('fall-heart');
-            heart.innerHTML = '❤';
-            heart.style.left = Math.random()*100 + '%';
-            document.getElementById("fallContainer").appendChild(heart);
-            setTimeout(()=>heart.remove(),6000);
+        // 每 400-800ms 生成一个飘落元素
+        setInterval(() => {
+            createFallElement();
+            // 偶尔一次生成两个
+            if (Math.random() > 0.6) {
+                setTimeout(createFallElement, 200);
+            }
+        }, 500);
+
+        // 初始快速生成一批
+        for (let i = 0; i < 15; i++) {
+            setTimeout(createFallElement, i * 300);
         }
-        setInterval(createHeart,600);
     </script>
 </body>
 </html>
