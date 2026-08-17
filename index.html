@@ -33,7 +33,7 @@
             display:flex;
         }
 
-        /* 第一页 欢迎互动页 */
+        /* 第一页 接收拒绝互动页 */
         #page1{
             justify-content:center;
             text-align:center;
@@ -71,7 +71,7 @@
             background:#e65c85;
             color:white;
             cursor:pointer;
-            transition: all 0.4s ease;
+            transition: transform 0.4s ease;
             box-shadow: 0 4px 12px #ffb4c8;
             z-index: 2;
         }
@@ -84,54 +84,72 @@
             background:#999999;
             color:white;
             cursor:pointer;
-            transition: all 0.4s ease;
+            transition: transform 0.4s ease;
             z-index: 1;
         }
 
-        /*第二页三栏布局*/
+        /*第二页布局*/
         #page2{
+            position: relative;
             padding-top:30px;
             padding-bottom:80px;
         }
 
-        .letter-wrapper{
-            max-width: 1300px;
-            width: 100%;
-            display:flex;
-            gap:24px;
-            align-items:flex-start;
-            position:relative;
-        }
-
-        /*左右照片容器，错落自由布局*/
+        /* 左右照片固定不动 fixed */
         .photo-column{
             width:230px;
-            position:relative;
-            min-height: 700px;
+            position:fixed;
+            top:60px;
+            height: 85vh;
+        }
+        .left-column{
+            left: 30px;
+        }
+        .right-column{
+            right: 30px;
         }
 
-        /*情书中间盒子*/
+        /*情书盒子：缩小宽度 + 独立滚动条 */
+        .letter-wrap{
+            max-width: 580px;
+            height: 88vh;
+            overflow-y: auto;
+            margin: 0 auto;
+            padding-right: 8px;
+        }
+
+        /*美化滚动条*/
+        .letter-wrap::-webkit-scrollbar{
+            width:6px;
+        }
+        .letter-wrap::-webkit-scrollbar-thumb{
+            background:#f0b0c0;
+            border-radius: 3px;
+        }
+
         .letter-box{
             background:rgba(255,255,255,0.85);
             border-radius:20px;
             padding:35px 28px;
-            flex:1;
-            max-width:640px;
             box-shadow: 0 6px 25px #ffc8d8;
             line-height:2.2;
             font-size:17px;
             color:#444;
         }
         .letter-title{
-            text-align:center;
+            text-align:left;
             font-size:22px;
             color:#c84c70;
             margin-bottom:20px;
             font-weight:bold;
         }
+        .paragraph{
+            text-indent: 2em;
+            margin-bottom:16px;
+        }
         .signature{
             text-align:right;
-            margin-top:30px;
+            margin-top:40px;
         }
 
         /*拍立得样式*/
@@ -161,7 +179,6 @@
             filter: brightness(1.02) saturate(1.05);
             pointer-events:none;
         }
-        /*拍立得底部留白*/
         .polaroid::after{
             content:"";
             display:block;
@@ -170,7 +187,6 @@
             margin-top:8px;
             border-radius:0 0 4px 4px;
         }
-        /*纸张噪点纹理*/
         .polaroid::before{
             content:"";
             position:absolute;
@@ -181,7 +197,6 @@
             opacity:0.35;
         }
 
-        /*呼吸动画：变大变小+浮动+轻微明暗闪烁*/
         @keyframes polaroidBreath{
             0%,100%{
                 opacity:1;
@@ -192,7 +207,7 @@
             }
         }
 
-        /* =========左侧7张 错落偏移位置+旋转角度========= */
+        /*左侧照片位置*/
         .p1{top:20px;   left:10px;    transform:rotate(-3deg); animation-delay:0.0s;}
         .p2{top:130px;  left:35px;    transform:rotate(2deg);  animation-delay:0.2s;}
         .p3{top:250px;  left:0px;     transform:rotate(-4deg); animation-delay:0.4s;}
@@ -201,7 +216,7 @@
         .p6{top:590px;  left:30px;    transform:rotate(4deg);  animation-delay:1.0s;}
         .p7{top:710px;  left:12px;    transform:rotate(-3deg); animation-delay:1.2s;}
 
-        /* =========右侧8张 错落偏移位置+旋转角度========= */
+        /*右侧照片位置*/
         .p8{top:40px;   left:0px;     transform:rotate(3deg);  animation-delay:0.1s;}
         .p9{top:150px;  left:32px;    transform:rotate(-2deg); animation-delay:0.3s;}
         .p10{top:270px; left:8px;     transform:rotate(4deg);  animation-delay:0.5s;}
@@ -211,7 +226,7 @@
         .p14{top:730px; left:6px;     transform:rotate(3deg);  animation-delay:1.3s;}
         .p15{top:845px; left:35px;    transform:rotate(-2deg); animation-delay:1.5s;}
 
-        /* 点击图片全屏弹窗 */
+        /*大图预览弹窗*/
         .lightbox{
             position: fixed;
             inset: 0;
@@ -229,23 +244,9 @@
         }
 
         /*手机适配*/
-        @media (max-width: 920px){
-            .letter-wrapper{
-                flex-direction: column;
-                align-items:center;
-            }
+        @media (max-width: 1200px){
             .photo-column{
-                width: 100%;
-                min-height: auto;
-                position: static;
-                display:flex;
-                flex-wrap: wrap;
-                gap:20px;
-                justify-content:center;
-                margin: 20px 0;
-            }
-            .polaroid{
-                position:static !important;
+                display:none;
             }
         }
 
@@ -266,98 +267,80 @@
     </style>
 </head>
 <body>
-    <!--全屏预览弹窗-->
     <div class="lightbox" id="lightbox">
         <img id="light-img" src="" alt="大图预览">
     </div>
     <div id="fallContainer"></div>
 
-    <!--第一页 接收拒绝互动页-->
+    <!--第一页互动-->
     <div class="page active" id="page1">
         <div class="heart">💗</div>
-        <p class="tip-text">有一封信，想送给最可爱的娴小咪<br>请选择是否接收这份心意</p>
+        <p class="tip-text">有一封信，想送给最爱的你<br>请选择是否接收这份心意</p>
         <div class="btn-group">
             <button class="accept-btn" id="acceptBtn">💌 接收</button>
             <button class="refuse-btn" id="refuseBtn">❌ 拒绝</button>
         </div>
     </div>
 
-    <!--第二页信件页面-->
+    <!--第二页情书页面-->
     <div class="page" id="page2">
-        <div class="letter-wrapper">
-            <!--左侧7张照片 pic1‑pic7 错落排布-->
-            <div class="photo-column left-column">
-                <div class="polaroid p1"><img src="pic1.jpg" alt="合照"></div>
-                <div class="polaroid p2"><img src="pic2.jpg" alt="合照"></div>
-                <div class="polaroid p3"><img src="pic3.jpg" alt="合照"></div>
-                <div class="polaroid p4"><img src="pic4.jpg" alt="合照"></div>
-                <div class="polaroid p5"><img src="pic5.jpg" alt="合照"></div>
-                <div class="polaroid p6"><img src="pic6.jpg" alt="合照"></div>
-                <div class="polaroid p7"><img src="pic7.jpg" alt="合照"></div>
-            </div>
-
-            <!--情书正文-->
+        <!--左侧固定照片栏-->
+        <div class="photo-column left-column">
+            <div class="polaroid p1"><img src="pic1.jpg" alt="合照"></div>
+            <div class="polaroid p2"><img src="pic2.jpg" alt="合照"></div>
+            <div class="polaroid p3"><img src="pic3.jpg" alt="合照"></div>
+            <div class="polaroid p4"><img src="pic4.jpg" alt="合照"></div>
+            <div class="polaroid p5"><img src="pic5.jpg" alt="合照"></div>
+            <div class="polaroid p6"><img src="pic6.jpg" alt="合照"></div>
+            <div class="polaroid p7"><img src="pic7.jpg" alt="合照"></div>
+        </div>
+        <!--情书滚动容器-->
+        <div class="letter-wrap">
             <div class="letter-box">
                 <div class="letter-title">亲爱的小思娴：</div>
-                <p>
-                        见字如面，展信舒颜！
-                </p>
-                <p>
-                        最喜欢给小宝宝写信诉说我对你的喜欢！每一次写信就如同再一次向你表白，每每在落笔的时候，你总是浮现在我的脑海中。
-                </p>
-                <p>
-                        本来是想写一封从头到尾的情书，没想到这段时间总是在惹你生气，但是却也没有和你好好的道歉，然后七夕节我也没有为你准备什么礼物（有滴，一个小礼物，只不过他是预售，到现在都还没发货！我跟客服软磨硬泡，那个客服就像是个人机一样就只会说不好意思我们是预售，有货了就会按顺序发的……所以需要宝宝再等等啦！小宝宝可以稍微期待一下下，只有一下下，不过还是希望可以让宝宝喜欢它）ok我们话又说回来，所以我想说的是原本的情书我就把它改成道歉和情书，宝宝请笑纳。
-                </p>
-                <p>
-                        小思娴，和你在一起即将迎来300天！不知不觉我们就要在一起一年啦。说真的我和你刚在一起的时候不敢想和你在一起能那么久，但是我心里一直都想和你久久的在一起，是因为我觉得自己没本事谈那么久的恋爱。曾经羡慕其他情侣长久的陪伴，没想到现在我也拥有了属于自己的小宝宝啦。多亏了你愿意和我一起经营我们这段感情，每一次争吵过后的和解，都让我们更加了解彼此，慢慢融入对方的生活。在相伴的日子里，我越来越发现你的闪闪发光，心思细腻，待人坦荡，三观温柔，很多我想不通的道理，你总能开导我。马思娴，你真的是一个很好很好的女孩。漂亮，可爱，明媚，灵动，高冷，软萌，所有美好的词汇都适合你。我想了许许多多夸赞你的词语，可到最后才发现世间所有美好的词语，都不及你本人万分之一。
-                </p>
-                <p>
-                        小宝宝呀我超级超级喜欢你呀，何其有幸，能够与你相伴同行。回头望去我们走过的路，每一段回忆都满是欢喜。嘴上说着我要学会独立不要总是黏着你，可没过多久就忍不住主动来找你，想知道你此刻正在做什么，想和你吃饭聊天打电话。很多时候我总是词不达意，心中万般的思念，却不知如何开口诉说。你早已成为我心之所向，牵动着我的喜怒哀乐。我爱你，不止当下，往后余生，爱意只会越来越浓。我渴望我们永远热恋，当然感情偶尔会归于平淡，但只要我们携手同心，平淡的日子也会开出浪漫的花。你永远都是我最珍视的宝贝，无论身在何处，心底总是挂念着你。我从来不是追求新鲜感的人，对你的爱意只会与日俱增，我会一直陪着你，不是一时兴起，而是深思熟虑后的坚定不移。闲暇之时看见好看的云朵、可爱的小猫，都会下意识想要分享给你；吃到美味的食物，第一时间就想着以后一定要带你一起来；在外游玩的时候，总会遗憾要是此刻你就在身边该有多好，只想时时刻刻靠近你，依偎在你身旁。从前难过委屈的时候我习惯一个人默默消化，但是现在我愿意把所有心事讲给你听。也希望你可以放心的把开心、烦恼、委屈全部说给我听，你的碎碎念，我永远愿意倾听。谢谢你来到我的世界，给我的生活增添了那么多温暖的光亮。
-                </p>
-                <p>
-                        不过捏我总是隔三差五惹宝宝难过，这个月就让你生了好几次闷气，让你伤心委屈，现在回想起来满心愧疚，这些本都是可以避免的。宝宝对不起！外出有事没有提前告知，让你一直悬着一颗心为我担忧。以后但凡计划有变，我一定第一时间和你报备，不会再让你苦苦等候。七夕那件事，并不是我不重视你，只是当时错误预估了自己的经济情况，让你满怀期待最后却落空，真的非常抱歉。我已经为你准备好了补偿礼物，往后也会加倍补偿你。还有打游戏忘记回消息这件错事，我再次向你深刻检讨！以后打游戏一定提前和你说一声，不会再出现失联的情况。我向你做出承诺，如果再犯，就罚我一周不能约你出去玩、吃饭聊天。以此为戒！
-                </p>
-                <p>
-                        之所以选择做成网页信件，也是因为微信长长的文字容易让人视觉疲惫，换一种方式送给你，希望你可以喜欢。
-                </p>
-                <p>
-                        小思娴对不起，小狗不想再惹你伤心难过了，往后的日子愿你三餐温暖，夜夜安眠，平安喜乐，万事顺心，天天开开心心！
-                </p>
-                <p>
-                        小思娴宝宝酱喜欢你呀，三百天快乐，七夕快乐！
-                </p>
-                <p>
-                        我爱你！
-                </p>
-                <div class="signature">爱你的沥小汪</div>
+                <p class="paragraph">见字如面，展信舒颜！</p>
+                <p class="paragraph">最喜欢给小宝宝写信诉说我对你的喜欢！每一次写信就如同再一次向你表白，每每在落笔的时候，你总是浮现在我的脑海中。</p>
+                <p class="paragraph">本来是想写一封从头到尾的情书，没想到这段时间总是在惹你生气，但是却也没有和你好好的道歉，然后七夕节我也没有为你准备什么礼物（有滴，一个小礼物，只不过他是预售，到现在都还没发货！我跟客服软磨硬泡，那个客服就像是个人机一样就只会说不好意思我们是预售，有货了就会按顺序发的……所以需要宝宝再等等啦！小宝宝可以稍微期待一下下，只有一下下，不过还是希望可以让宝宝喜欢它）ok我们话又说回来，所以我想说的是原本的情书我就把它改成道歉和情书，宝宝请笑纳。</p>
+                <p class="paragraph">小思娴，和你在一起即将迎来300天！不知不觉我们就要在一起一年啦。说真的我和你刚在一起的时候不敢想和你在一起能那么久，但是我心里一直都想和你久久的在一起，是因为我觉得自己没本事谈那么久的恋爱。曾经羡慕其他情侣长久的陪伴，没想到现在我也拥有了属于自己的小宝宝啦。多亏了你愿意和我一起经营我们这段感情，每一次争吵过后的和解，都让我们更加了解彼此，慢慢融入对方的生活。在相伴的日子里，我越来越发现你的闪闪发光，心思细腻，待人坦荡，三观温柔，很多我想不通的道理，你总能开导我。马思娴，你真的是一个很好很好的女孩。漂亮，可爱，明媚，灵动，高冷，软萌，所有美好的词汇都适合你。我想了许许多多夸赞你的词语，可到最后才发现世间所有美好的词语，都不及你本人万分之一。</p>
+                <p class="paragraph">小宝宝呀我超级超级喜欢你呀，何其有幸，能够与你相伴同行。回头望去我们走过的路，每一段回忆都满是欢喜。嘴上说着我要学会独立不要总是黏着你，可没过多久就忍不住主动来找你，想知道你此刻正在做什么，想和你吃饭聊天打电话。很多时候我总是词不达意，心中万般的思念，却不知如何开口诉说。你早已成为我心之所向，牵动着我的喜怒哀乐。我爱你，不止当下，往后余生，爱意只会越来越浓。我渴望我们永远热恋，当然感情偶尔会归于平淡，但只要我们携手同心，平淡的日子也会开出浪漫的花。你永远都是我最珍视的宝贝，无论身在何处，心底总是挂念着你。我从来不是追求新鲜感的人，对你的爱意只会与日俱增，我会一直陪着你，不是一时兴起，而是深思熟虑后的坚定不移。闲暇之时看见好看的云朵、可爱的小猫，都会下意识想要分享给你；吃到美味的食物，第一时间就想着以后一定要带你一起来；在外游玩的时候，总会遗憾要是此刻你就在身边该有多好，只想时时刻刻靠近你，依偎在你身旁。从前难过委屈的时候我习惯一个人默默消化，但是现在我愿意把所有心事讲给你听。也希望你可以放心的把开心、烦恼、委屈全部说给我听，你的碎碎念，我永远愿意倾听。谢谢你来到我的世界，给我的生活增添了那么多温暖的光亮。</p>
+                <p class="paragraph">不过捏我总是隔三差五惹宝宝难过，这个月就让你生了好几次闷气，让你伤心委屈，现在回想起来满心愧疚，这些本都是可以避免的。宝宝对不起！外出有事没有提前告知，让你一直悬着一颗心为我担忧。以后但凡计划有变，我一定第一时间和你报备，不会再让你苦苦等候。七夕那件事，并不是我不重视你，只是当时错误预估了自己的经济情况，让你满怀期待最后却落空，真的非常抱歉。我已经为你准备好了补偿礼物，往后也会加倍补偿你。还有打游戏忘记回消息这件错事，我再次向你深刻检讨！以后打游戏一定提前和你说一声，不会再出现失联的情况。我向你做出承诺，如果再犯，就罚我一周不能约你出去玩、吃饭聊天。以此为戒！</p>
+                <p class="paragraph">之所以选择做成网页信件，也是因为微信长长的文字容易让人视觉疲惫，换一种方式送给你，希望你可以喜欢。</p>
+                <p class="paragraph">小思娴对不起，小狗不想再惹你伤心难过了，往后的日子愿你三餐温暖，夜夜安眠，平安喜乐，万事顺心，天天开开心心！</p>
+                <p class="paragraph">小思娴宝宝酱喜欢你呀，三百天快乐，七夕快乐！</p>
+                <p class="paragraph">我爱你！</p>
+                <div class="signature">爱你的小狗狗<br>2026‑08‑17</div>
             </div>
-
-            <!--右侧8张照片 pic8‑pic15 错落排布-->
-            <div class="photo-column right-column">
-                <div class="polaroid p8"><img src="pic8.jpg" alt="合照"></div>
-                <div class="polaroid p9"><img src="pic9.jpg" alt="合照"></div>
-                <div class="polaroid p10"><img src="pic10.jpg" alt="合照"></div>
-                <div class="polaroid p11"><img src="pic11.jpg" alt="合照"></div>
-                <div class="polaroid p12"><img src="pic12.jpg" alt="合照"></div>
-                <div class="polaroid p13"><img src="pic13.jpg" alt="合照"></div>
-                <div class="polaroid p14"><img src="pic14.jpg" alt="合照"></div>
-                <div class="polaroid p15"><img src="pic15.jpg" alt="合照"></div>
-            </div>
+        </div>
+        <!--右侧固定照片栏-->
+        <div class="photo-column right-column">
+            <div class="polaroid p8"><img src="pic8.jpg" alt="合照"></div>
+            <div class="polaroid p9"><img src="pic9.jpg" alt="合照"></div>
+            <div class="polaroid p10"><img src="pic10.jpg" alt="合照"></div>
+            <div class="polaroid p11"><img src="pic11.jpg" alt="合照"></div>
+            <div class="polaroid p12"><img src="pic12.jpg" alt="合照"></div>
+            <div class="polaroid p13"><img src="pic13.jpg" alt="合照"></div>
+            <div class="polaroid p14"><img src="pic14.jpg" alt="合照"></div>
+            <div class="polaroid p15"><img src="pic15.jpg" alt="合照"></div>
         </div>
     </div>
 
     <script>
-        //接收按钮放大互动逻辑
         const acceptBtn = document.getElementById("acceptBtn");
         const refuseBtn = document.getElementById("refuseBtn");
         let scaleNum = 1;
+        let offsetX = 0;
+        const maxOffset = 550; //拒绝按钮向右移动的最大距离，移出屏幕
+        let stopGrow = false;
 
         refuseBtn.onclick = function(){
+            if(stopGrow) return;
             scaleNum += 0.22;
+            offsetX += 35;
             acceptBtn.style.transform = `scale(${scaleNum})`;
-            //放大到阈值，拒绝按钮被挤出屏幕，直接隐藏
-            if(scaleNum >= 2.4){
-                refuseBtn.style.display = 'none';
+            refuseBtn.style.transform = `translateX(${offsetX}px)`;
+            //拒绝按钮移到边界后停止放大
+            if(offsetX >= maxOffset){
+                stopGrow = true;
             }
         }
 
@@ -366,7 +349,7 @@
             document.getElementById("page2").classList.add('active');
         }
 
-        // 照片点击放大预览功能
+        //图片预览
         const lightbox = document.getElementById('lightbox');
         const lightImg = document.getElementById('light-img');
         const allPhotos = document.querySelectorAll('.polaroid img');
@@ -376,7 +359,6 @@
                 lightbox.style.display = 'flex';
             }
         })
-        //点击遮罩关闭大图
         lightbox.onclick = function(){
             lightbox.style.display = 'none';
         }
