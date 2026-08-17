@@ -2,7 +2,6 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <!-- 适配手机微信 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>给你的一封信💌</title>
     <style>
@@ -12,44 +11,51 @@
             box-sizing: border-box;
             font-family: "Microsoft Yahei",sans-serif;
         }
+
         body{
             background: linear-gradient(135deg,#ffd6e0,#ffecf0,#e8f4ff);
             min-height:100vh;
             overflow-x:hidden;
         }
-        /* 页面容器 */
+
         .page{
             width:100%;
             min-height:100vh;
             display:flex;
             flex-direction:column;
-            justify-content:flex‑start;
+            justify-content:flex-start;
             align-items:center;
             padding:20px;
             display:none;
         }
+
         .page.active{
             display:flex;
         }
+
         /* 第一页 欢迎页 */
         #page1{
             justify-content:center;
             text-align:center;
         }
+
         .heart{
             font-size:80px;
             animation: beat 1s infinite;
             margin-bottom:30px;
         }
+
         @keyframes beat{
             0%,100%{transform: scale(1);}
             50%{transform: scale(1.15);}
         }
+
         .tip-text{
             font-size:20px;
             color:#c84c70;
             margin-bottom:40px;
         }
+
         .btn{
             padding:14px 36px;
             font-size:18px;
@@ -61,19 +67,46 @@
             transition:0.3s;
             box-shadow: 0 4px 12px #ffb4c8;
         }
+
         .btn:hover{
             background:#d0446c;
         }
-        /* 第二页 情书页面，纯手动滑动 */
+
+        /*第二页 整体三栏布局：左照片‑情书‑右照片*/
         #page2{
             padding-top:30px;
             padding-bottom:60px;
         }
+
+        .letter-wrapper{
+            max-width: 1280px;
+            width: 100%;
+            display:flex;
+            gap:28px;
+            align-items:flex-start;
+        }
+
+        /*左右照片竖栏*/
+        .photo-column{
+            width:220px;
+            display:flex;
+            flex-direction:column;
+            gap:26px;
+            padding-top:10px;
+        }
+        .left-column{
+            align-items:flex-end;
+        }
+        .right-column{
+            align-items:flex-start;
+        }
+
+        /*情书中间盒子*/
         .letter-box{
             background:rgba(255,255,255,0.85);
             border-radius:20px;
             padding:35px 25px;
-            max-width:600px;
+            flex:1;
             box-shadow: 0 6px 25px #ffc8d8;
             line-height:2;
             font-size:17px;
@@ -90,7 +123,94 @@
             text-align:right;
             margin-top:30px;
         }
-        /* 飘落爱心动画 */
+
+        /*拍立得样式 白边框+纸张质感*/
+        .polaroid{
+            width:170px;
+            background:#ffffff;
+            padding:12px 12px 18px 12px;
+            border-radius:6px;
+            box-shadow:
+                0 12px 28px rgba(180, 120, 140, 0.22),
+                0 0 0 1px rgba(255,255,255,0.8);
+            position:relative;
+            animation: polaroidBreath 3.2s ease-in-out infinite;
+        }
+        .polaroid img{
+            width:100%;
+            height:130px;
+            object-fit:cover;
+            border-radius:4px;
+            display:block;
+            filter: brightness(1.02) saturate(1.05);
+        }
+        /*拍立得底部留白区域*/
+        .polaroid::after{
+            content:"";
+            display:block;
+            height:18px;
+            background:#fffaf2;
+            margin-top:8px;
+            border-radius:0 0 4px 4px;
+        }
+        /*纸张噪点纹理*/
+        .polaroid::before{
+            content:"";
+            position:absolute;
+            inset:0;
+            border-radius:6px;
+            background-image:url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+            pointer-events:none;
+            opacity:0.35;
+        }
+
+        /*呼吸动画：变大变小+浮动+轻微明暗闪烁*/
+        @keyframes polaroidBreath{
+            0%,100%{
+                transform: translateY(0px) scale(1);
+                opacity:1;
+            }
+            50%{
+                transform: translateY(-8px) scale(1.06);
+                opacity:0.93;
+            }
+        }
+        /*错开动画时间 + 每张照片轻微倾斜*/
+        .p1{animation-delay:0.0s; transform:rotate(-3deg);}
+        .p2{animation-delay:0.2s; transform:rotate(2deg);}
+        .p3{animation-delay:0.4s; transform:rotate(-4deg);}
+        .p4{animation-delay:0.6s; transform:rotate(3deg);}
+        .p5{animation-delay:0.8s; transform:rotate(-2deg);}
+        .p6{animation-delay:1.0s; transform:rotate(4deg);}
+        .p7{animation-delay:1.2s; transform:rotate(-3deg);}
+        .p8{animation-delay:0.1s; transform:rotate(3deg);}
+        .p9{animation-delay:0.3s; transform:rotate(-2deg);}
+        .p10{animation-delay:0.5s; transform:rotate(4deg);}
+        .p11{animation-delay:0.7s; transform:rotate(-3deg);}
+        .p12{animation-delay:0.9s; transform:rotate(2deg);}
+        .p13{animation-delay:1.1s; transform:rotate(-4deg);}
+        .p14{animation-delay:1.3s; transform:rotate(3deg);}
+        .p15{animation-delay:1.5s; transform:rotate(-2deg);}
+
+        /*手机适配：三栏变单栏，照片全部放在信件下方纵向排列*/
+        @media (max-width: 920px){
+            .letter-wrapper{
+                flex-direction: column;
+                align-items:center;
+            }
+            .photo-column{
+                width: 100%;
+                flex-direction:row;
+                flex-wrap:wrap;
+                justify-content:center;
+                align-items:center;
+            }
+            .left-column{
+                align-items:center;
+            }
+        }
+
+        /*飘落爱心*/
         .fall-heart{
             position:fixed;
             top:-50px;
@@ -117,41 +237,69 @@
         <button class="btn" onclick="openLetter()">💌 打开信件</button>
     </div>
 
-    <!-- 第二页 情书内容 -->
+    <!--第二页：左照片 + 情书 + 右照片-->
     <div class="page" id="page2">
-        <div class="letter-box">
-            <div class="letter-title">亲爱的小思娴：</div>
-            <p>
-                见字如面，展信舒颜！
-            </p>
-            <p>
-                最喜欢给小宝宝写信诉说我对你的喜欢！每一次写信就如同再一次向你表白，每每在落笔的时候，你总是浮现在我的脑海中。
-            </p>
-            <p>
-                本来是想写一封从头到尾的情书，没想到这段时间总是在惹你生气，但是却也没有和你好好的道歉，然后七夕节我也没有为你准备什么礼物（其实是有滴，一个小礼物，只不过他是预售，到现在都还没发货！我跟客服软磨硬泡，那个客服就像是个人机一样就只会说不好意思我们是预售，有货了就会按顺序发的，肯定能在预售时间内发货的……所以需要宝宝再等等啦！希望可以让宝宝喜欢它）好我们话又说回来，所以我想说的是原本的情书我就把它改成道歉和情书，宝宝请笑纳。
-            </p>
-            <p>
-                小思娴，和你在一起即将迎来300天！不知不觉我们就要在一起一年啦。说真的我和你刚在一起的时候不敢想和你在一起能那么久，但是我心里一直都想和你一直久久的在一起，是因为我觉得自己没这个本事谈那么那么久。曾经羡慕其他情侣的长久恋爱，没想到现在我也有自己的小宝宝啦。多亏了宝宝和我一起经营我们的关系，在每一次争吵中和好，每一次和好中感情升温，我们越来越了解彼此，越来越融入彼此。在前面的这些日子里，我也越来越发现你的特别，心思细腻，大大方方，三观正，有些时候也会讲一些我不明白的道理，马思娴你是一个特别特别好的咪。漂亮，可爱，美丽，帅气，高冷，萌全都是马思娴。想了好多好多漂亮的词来夸你结果发现最最漂亮的只有你呀我的小乖乖！
-            </p>
-            <p>
-                小宝宝呀我超级超级喜欢你呀，好开心和自己最喜欢的人一起走了那么久，以后也会一起走下去的。宝宝酱我的宝宝酱真的很幸运和你在一起，回过头来看我们走过的这段时间，真的好开心好开心。总是在说自己要独立不要那么黏你，但是没过多久自己忍不住就想找宝宝了，宝宝在干嘛呀宝宝想我了吗宝宝要一起玩吗宝宝一起吃饭吧宝宝可以打电话吗宝宝你怎么不理我…。我总是词不达意，所以会去问问AI，但是我绝不会让他来敷衍我们的感情，我只会说马思娴对我特别好，我有多想你，但是具体的我不太会说出来。我只知道你是我的意外，你会牵动着我的心。我爱你，现在爱，以后会更爱你！嘿嘿我想一直和宝宝热恋，但我们总会有平淡期的时候，我相信因为我们的感情非常稳定所以慢慢变得平淡，但是我们俩会让平淡的感情变得鲜活，宝宝酱你也一直都是我最珍视的宝贝，对我来说真的很重要，在家里会想，在外面更是想得不得了。我不是图新鲜感的人，我对你的爱会越来越深，我会陪你很久很久，不是我想，是我一定会，忙时想你，闲时想你，满脑子都是你。人们都说感情不能太主动，要知进退,学会欲擒故纵,可我没那么多手段，要是在外面和朋友玩或者看见好看的东西云朵可爱的小猫，我都想第一时间分享给你，有好吃的我想和你一起品尝，有想买的我想和你一起逛一起还价，在外面非常想你，因为我觉得出去玩好像你应该在我身边，这样我就可以和你做想做的事情，只想跟你在一起，我只想靠近,再靠近一点,直到没有距离。受委屈了也会想你，以前的柳竣沥总是习惯一个人把不开心咽下去，但现在总是和马思娴诉说我的不开心，我遇到的奇葩事，和家里的关系。小宝宝你也要跟我讲你的开心，你的心事，你的抱怨，你的喜怒哀乐都是我的，我喜欢宝宝跟我讲，哪怕是废话我都愿意听。宝宝酱因为你的出现让我的生活变得更加有趣。谢谢你我的小思娴！
-            </p>
-            <p>
-                不过捏我总是隔三岔五的惹宝宝酱生气。这个月就已经让宝宝生了好多次气了，让宝宝受伤，让宝宝难过，呜呜呜这些都不是我的本意！总是在不经意间造成这些事情。宝宝酱对不起！出去玩没有和宝宝讲，让宝宝担心了好久！要是有什么平时没有的安排我会提前和宝宝说，不让宝宝担心，宝宝对我可是最好啦！我七夕节忘记了，但是我没有不重视乖乖，我之前应该提前跟你讲的，我八月份可能没零花钱，准备不了什么礼物，结果现在你给我准备好了礼物但是我却告诉你我忘记了，让你的期望落空了，对不起宝宝酱，不过我有准备了一个，就是我开头跟你讲的，宝宝请笑纳，作为我的一个补偿，以后会有大大的补偿！关于我自己打游戏没有告诉马思娴，然后没有回宝宝的消息这件事我又犯了！大罪！明明之前都给宝宝承诺过自己去玩游戏的话要给提前说一下，结果这次又这样子犯，属实大罪！作为惩罚，开学了请宝宝吃火锅吃蛋糕！通通我请客。我跟宝宝承诺若再犯，就失去一周前和马思娴玩游戏（或者吃饭，一起学习，聊天，出去玩）的资格！以此为戒！
-            </p>
-            <p>
-                我觉得微信发小作文太不好了，而且我还不知道你喜不喜欢看微信的长篇小作文，所以这次就用这种方式来表达吧！
-            </p>
-            <p>
-                小思娴宝宝酱喜欢你呀，三百天快乐，七夕快乐！
-            </p>
-            <p>
-                我爱你！
-            </p>
-            <div class="signature">柳竣沥</div>
+        <div class="letter-wrapper">
+            <!--左侧7张照片 pic1‑pic7-->
+            <div class="photo-column left-column">
+                <div class="polaroid p1"><img src="pic1.jpg" alt="合照"></div>
+                <div class="polaroid p2"><img src="pic2.jpg" alt="合照"></div>
+                <div class="polaroid p3"><img src="pic3.jpg" alt="合照"></div>
+                <div class="polaroid p4"><img src="pic4.jpg" alt="合照"></div>
+                <div class="polaroid p5"><img src="pic5.jpg" alt="合照"></div>
+                <div class="polaroid p6"><img src="pic6.jpg" alt="合照"></div>
+                <div class="polaroid p7"><img src="pic7.jpg" alt="合照"></div>
+            </div>
+
+            <!--情书正文-->
+            <div class="letter-box">
+                <div class="letter-title">亲爱的小思娴：</div>
+                <p>
+                    见字如面，展信舒颜！
+                </p>
+                <p>
+                    最喜欢给小宝宝写信诉说我对你的喜欢！每一次写信就如同再一次向你表白，每每在落笔的时候，你总是浮现在我的脑海中。
+                </p>
+                <p>
+                    本来是想写一封从头到尾的情书，没想到这段时间总是在惹你生气，但是却也没有和你好好的道歉，然后七夕节我也没有为你准备什么礼物（有滴，一个小礼物，只不过他是预售，到现在都还没发货！我跟客服软磨硬泡，那个客服就像是个人机一样就只会说不好意思我们是预售，有货了就会按顺序发的……所以需要宝宝再等等啦！小宝宝可以稍微期待一下下，只有一下下，不过还是希望可以让宝宝喜欢它）ok我们话又说回来，所以我想说的是原本的情书我就把它改成道歉和情书，宝宝请笑纳。
+                </p>
+                <p>
+                    小思娴，和你在一起即将迎来300天！不知不觉我们就要在一起一年啦。说真的我和你刚在一起的时候不敢想和你在一起能那么久，但是我心里一直都想和你一直久久的在一起，是因为我觉得自己没这个本事谈那么那么久。曾经羡慕其他情侣的长久恋爱，没想到现在我也有自己的小宝宝啦。多亏了宝宝和我一起经营我们的关系，在每一次争吵中和好，每一次和好中感情升温，我们越来越了解彼此，越来越融入彼此。在前面的这些日子里，我也越来越发现你的特别，心思细腻，大大方方，三观正，有些时候也会讲一些我不明白的道理，马思娴你是一个特别特别好的咪。漂亮，可爱，美丽，帅气，高冷，萌全都是马思娴。想了好多好多漂亮的词来夸你结果发现最最漂亮的只有你呀我的小乖乖！
+                </p>
+                <p>
+                    小宝宝呀我超级超级喜欢你呀，好开心和自己最喜欢的人一起走了那么久，以后也会一起走下去的。宝宝酱我的宝宝酱真的很幸运和你在一起，回过头来看我们走过的这段时间，真的好开心好开心。总是在说自己要独立不要那么黏你，但是没过多久自己忍不住就想找宝宝了，宝宝在干嘛呀宝宝想我了吗宝宝要一起玩吗宝宝一起吃饭吧宝宝可以打电话吗宝宝你怎么不理我…。我总是词不达意，所以会去问问AI，但是我绝不会让他来敷衍我们的感情，我只会说马思娴对我特别好，我有多想你，但是具体的我不太会说出来。我只知道你是我的意外，你会牵动着我的心。我爱你，现在爱，以后会更爱你！嘿嘿我想一直和宝宝热恋，但我们总会有平淡期的时候，我相信因为我们的感情非常稳定所以慢慢变得平淡，但是我们俩会让平淡的感情变得鲜活，宝宝酱你也一直都是我最珍视的宝贝，对我来说真的很重要，在家里会想，在外面更是想得不得了。我不是图新鲜感的人，我对你的爱会越来越深，我会陪你很久很久，不是我想，是我一定会，忙时想你，闲时想你，满脑子都是你。人们都说感情不能太主动，要知进退,学会欲擒故纵,可我没那么多手段，要是在外面和朋友玩或者看见好看的东西云朵可爱的小猫，我都想第一时间分享给你，有好吃的我想和你一起品尝，有想买的我想和你一起逛一起还价，在外面非常想你，因为我觉得出去玩好像你应该在我身边，这样我就可以和你做想做的事情，只想跟你在一起，我只想靠近,再靠近一点,直到没有距离。受委屈了也会想你，以前的柳竣沥总是习惯一个人把不开心咽下去，但现在总是和马思娴诉说我的不开心，我遇到的奇葩事，和家里的关系。小宝宝你也要跟我讲你的开心，你的心事，你的抱怨，你的喜怒哀乐都是我的，我喜欢宝宝跟我讲，哪怕是废话我都愿意听。宝宝酱因为你的出现让我的生活变得更加有趣。谢谢你我的小思娴！
+                </p>
+                <p>
+                    不过捏我总是隔三岔五的惹宝宝酱生气。这个月就已经让宝宝生了好多次气了，让宝宝受伤，让宝宝难过，呜呜呜这些都不是我的本意！总是在不经意间造成这些事情。宝宝酱对不起！出去玩没有和宝宝讲，让宝宝担心了好久！要是有什么平时没有的安排我会提前和宝宝说，不让宝宝担心，宝宝对我可是最好啦！我七夕节忘记了，但是我没有不重视乖乖，我之前应该提前跟你讲的，我八月份可能没零花钱，准备不了什么礼物，结果现在你给我准备好了礼物但是我却告诉你我忘记了，让你的期望落空了，对不起宝宝酱，不过我有准备了一个，就是我开头跟你讲的，宝宝请笑纳，作为我的一个补偿，以后会有大大的补偿！关于我自己打游戏没有告诉马思娴，然后没有回宝宝的消息这件事我又犯了！大罪！明明之前都给宝宝承诺过自己去玩游戏的话要给提前说一下，结果这次又这样子犯，属实大罪！作为惩罚，开学了请宝宝吃火锅吃蛋糕！通通我请客。我跟宝宝承诺若再犯，就失去一周前和马思娴玩游戏（或者吃饭，一起学习，聊天，出去玩）的资格！以此为戒！
+                </p>
+                <p>
+                    我觉得微信发小作文不合适，而且我还不知道你喜不喜欢看微信的长篇小作文，可能看得头都要大了，所以这次就用这种方式来表达吧！
+                </p>
+                <p>
+                    小思娴对不起，小狗知道错了，小狗不想让你情绪不好，希望你好好吃饭好好睡觉好好学习，吃得好睡得好学得好，天天开心！
+                </p>
+                <p>
+                    小思娴宝宝酱喜欢你呀，三百天快乐，七夕快乐！
+                </p>
+                <p>
+                    我爱你！
+                </p>
+                <div class="signature">爱你的小狗狗</div>
+            </div>
+
+            <!--右侧8张照片 pic8‑pic15-->
+            <div class="photo-column right-column">
+                <div class="polaroid p8"><img src="pic8.jpg" alt="合照"></div>
+                <div class="polaroid p9"><img src="pic9.jpg" alt="合照"></div>
+                <div class="polaroid p10"><img src="pic10.jpg" alt="合照"></div>
+                <div class="polaroid p11"><img src="pic11.jpg" alt="合照"></div>
+                <div class="polaroid p12"><img src="pic12.jpg" alt="合照"></div>
+                <div class="polaroid p13"><img src="pic13.jpg" alt="合照"></div>
+                <div class="polaroid p14"><img src="pic14.jpg" alt="合照"></div>
+                <div class="polaroid p15"><img src="pic15.jpg" alt="合照"></div>
+            </div>
         </div>
     </div>
-
 
     <script>
         //切换页面打开情书
